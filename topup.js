@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-const TransferScreen = () => {
+const TopUpScreen = () => {
   const [amount, setAmount] = useState('100.000');
   const [paymentMethod, setPaymentMethod] = useState('BYOND Pay');
   const [notes, setNotes] = useState('');
@@ -14,12 +14,8 @@ const TransferScreen = () => {
         <View style={styles.header}>
             <View style={{ flexDirection:'row', alignItems: 'center' }}>
                 <Ionicons name= 'chevron-back' size={20} color='black'></Ionicons>
-                <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft:5}}>Transfer</Text>
-                
+                <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft:5}}>Top Up</Text>
             </View> 
-        </View>
-        <View style={styles.greenContainer}>
-          <Text style={styles.greenText}>To: 9000008940208</Text>
         </View>
 
         <View style={styles.container}>         
@@ -34,14 +30,18 @@ const TransferScreen = () => {
                         onChangeText={setAmount}
                     />
                 </View>
-
-                <View style={styles.balanceContainer}>
-                  <Text style={styles.balanceLabel}>Balance</Text>
-                  <Text style={styles.balanceValue}>Rp 10.000.000</Text>
-                </View>
             </View>
 
-            
+            <View style={styles.pickerContainer}>
+                <Picker
+                    selectedValue={paymentMethod}
+                    onValueChange={(itemValue) => setPaymentMethod(itemValue)}
+                    style={styles.picker}
+                >
+                    <Picker.Item label="BYOND Pay" value="BYOND Pay" />
+                    <Picker.Item label="Other Payment" value="Other Payment" />
+                </Picker>
+            </View>
 
             <View style={styles.section}>
                 <Text style={styles.label}>Notes</Text>
@@ -52,8 +52,8 @@ const TransferScreen = () => {
                 />
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={() => alert('Transfer Successful!')}>
-                <Text style={styles.buttonText}>Transfer</Text>
+            <TouchableOpacity style={styles.button} onPress={() => alert('Top Up Successful!')}>
+                <Text style={styles.buttonText}>Top Up</Text>
             </TouchableOpacity>
         </View>
     </SafeAreaProvider>
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fafbfd',
   },
   header: {
+    marginBottom: 5,
     backgroundColor: '#ffffff',
     padding:20,
     shadowColor: '#000',
@@ -77,14 +78,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  greenContainer: {
-    backgroundColor: '#2A9999',
-    padding:15,
-  },
-  greenText: {
-    color: '#ffffff',
-    fontSize: 16,
   },
   section: {
     padding:20
@@ -141,19 +134,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  balanceContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 5,
-  },
-  balanceLabel: {
-    fontSize: 14,
-    color: 'gray',
-  },
-  balanceValue: {
-    fontSize: 14,
-    color: '#2A9999',
-  },
 });
 
-export default TransferScreen;
+export default TopUpScreen;
