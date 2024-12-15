@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-export default function CustomCheckBox({ label, onValueChange, value }) {
+export default function CustomCheckBox({ label, onValueChange, value, navigation }) {
   const [isChecked, setIsChecked] = useState(value || false);
 
   const toggleCheckbox = () => {
@@ -20,7 +20,11 @@ export default function CustomCheckBox({ label, onValueChange, value }) {
           <Ionicons name="checkmark" size={16} color="white" />
         )}
       </View>
-      {label && <Text style={styles.label}>{label}</Text>}
+      <View style={{marginLeft: 10}}>
+       {label && <Text style={styles.label}>{label}</Text>}
+        <Text style={styles.linkText} onPress={() => navigation.navigate('Terms and Condition')}>Terms and Condition *</Text>
+      </View>
+      
     </TouchableOpacity>
   );
 }
@@ -49,5 +53,10 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     color: '#333',
+  },
+  linkText: {
+    color: '#008080',
+    fontSize: 16,
+    textDecorationLine: 'underline',
   },
 });

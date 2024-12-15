@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-export default function App(){
+export default function Home({navigation}){
     const [isBalanceVisible, setIsBalanceVisible] = useState(true);
     const transactions = [
         { id: '1', name: 'Adityo Gizwanda', type: 'Transfer', amount: -75000, date: '08 December 2024' },
@@ -51,43 +51,44 @@ export default function App(){
                 ListHeaderComponent={
                 <View style= {styles.container}>
                     <View style={styles.greeting}>
-                    <View>
-                        <Text style={styles.greetingText}>Good Morning</Text>
-                        <Text style={styles.checkAllText}>Check all your incoming and outgoing transactions here</Text>
-                    </View>
-                    <Image source={require('./assets/Group.png')} />
+                      <View>
+                          <Text style={styles.greetingText}>Good Morning</Text>
+                          <Text style={styles.checkAllText}>Check all your incoming and outgoing transactions here</Text>
+                      </View>
+                      <Image source={require('./assets/Group.png')} />
                     </View>
 
                     <View style={styles.accountInfo}>
-                    <Text style={styles.accountLabel}>Account No.</Text>
-                    <Text style={styles.accountNumber}>100899</Text>
+                      <Text style={styles.accountLabel}>Account No.</Text>
+                      <Text style={styles.accountNumber}>100899</Text>
                     </View>
 
                     <View style={styles.balanceActionContainer}>
-                    <View style={styles.balanceContainer}>
-                        <Text style={styles.balanceLabel}>Balance</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.balanceAmount}>
-                            {isBalanceVisible ? 'Rp 10.000.000' : '*********'}
-                        </Text>
-                        <TouchableOpacity onPress={() => setIsBalanceVisible(!isBalanceVisible)}>
-                            <Ionicons style={{margin: 5}}
-                            name={isBalanceVisible ? 'eye-outline' : 'eye-off-outline'}
-                            size={20}
-                            color="#969696"
-                            />
-                        </TouchableOpacity>
-                        </View>
-                    </View>
+                      <View style={styles.balanceContainer}>
+                          <Text style={styles.balanceLabel}>Balance</Text>
+                          <View style={{ flexDirection: 'row' }}>
+                          <Text style={styles.balanceAmount}>
+                              {isBalanceVisible ? 'Rp 10.000.000' : '*********'}
+                          </Text>
+                          <TouchableOpacity onPress={() => setIsBalanceVisible(!isBalanceVisible)}>
+                              <Ionicons style={{margin: 5}}
+                              name={isBalanceVisible ? 'eye-outline' : 'eye-off-outline'}
+                              size={20}
+                              color="#969696"
+                              />
+                          </TouchableOpacity>
+                          </View>
+                      </View>
 
-                    <View style={styles.actions}>
-                        <TouchableOpacity style={styles.button}>
-                        <Ionicons name="add" size={24} color="#fff" />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button}>
-                        <Ionicons name="paper-plane" size={24} color="#fff" />
-                        </TouchableOpacity>
-                    </View>
+                      <View style={styles.actions}>
+                          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Top Up')}>
+                            <Ionicons name="add" size={24} color="#fff" />
+                          </TouchableOpacity>
+
+                          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Transfer')}>
+                           <Ionicons name="paper-plane" size={24} color="#fff" />
+                          </TouchableOpacity>
+                      </View>
                     </View>
 
                     <Text style={styles.transactionHistoryLabel}>Transaction History</Text>
@@ -111,7 +112,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#ffffff',
         marginBottom: 20,
-        padding: 20,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowRadius: 5,
@@ -166,7 +168,7 @@ const styles = StyleSheet.create({
         color: '#555',
       },
       balanceAmount: {
-        fontWeight: '600',
+        fontWeight: '700',
         fontSize: 24,
       },
       actionButtons: {
@@ -215,6 +217,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 5,
         elevation: 3,
+        alignItems: 'center'
       },
       actions: {
         flexDirection: 'column',

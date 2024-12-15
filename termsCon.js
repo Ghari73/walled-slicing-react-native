@@ -8,13 +8,6 @@ const TermsCon = () => {
 
   return (
     <SafeAreaProvider>
-        <View style={styles.header}>
-            <View style={{ flexDirection:'row', alignItems: 'center' }}>
-                <Ionicons name= 'chevron-back' size={20} color='black'></Ionicons>
-                <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft:5}}>Terms and Condition</Text>
-            </View> 
-        </View>
-
         <ScrollView style={{padding: 20}}>
             <Text style={{marginBottom: 20}}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. 

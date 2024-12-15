@@ -7,10 +7,8 @@ import {
   TouchableOpacity, Image
 } from 'react-native';
 import CustomCheckBox from './customCheckBox';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-
-export default function RegisterScreen() {
+export default function RegisterScreen({navigation}) {
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -52,9 +50,10 @@ export default function RegisterScreen() {
 
       {/* Terms and Conditions */}
       <CustomCheckBox
-        label="I have read and agree to the Terms and Conditions"
+        label="I have read and agree to the"
         value={isChecked}
         onValueChange={(newValue) => setIsChecked(newValue)}
+        navigation={navigation}
       />
 
       <TouchableOpacity
@@ -63,6 +62,7 @@ export default function RegisterScreen() {
           { backgroundColor: isChecked ? '#007B7F' : '#ccc' },
         ]}
         disabled={!isChecked}
+        // onPress = {() => navigation.navigate('Login')}
       >
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
@@ -70,7 +70,7 @@ export default function RegisterScreen() {
       {/* Link Login */}
       <Text style={styles.loginText}>
         Have an account?{' '}
-        <Text style={styles.linkText}>Login here</Text>
+        <Text style={styles.linkText} onPress = {() => navigation.navigate('Login')}>Login here</Text>
       </Text>
     </View>
   );

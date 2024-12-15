@@ -6,11 +6,9 @@ import {
   View,
   TouchableOpacity, Image
 } from 'react-native';
-import CustomCheckBox from './customCheckBox';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -35,13 +33,13 @@ export default function LoginScreen() {
         onChangeText={setPassword}
     />
 
-    <TouchableOpacity style={styles.button} onPress={() => alert('Transfer Successful!')}>
+    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
         <Text style={styles.buttonText}>Login</Text>
     </TouchableOpacity>
       {/* Link Login */}
       <Text style={styles.loginText}>
         Don't have account?{' '}
-        <Text style={styles.linkText}>Register here</Text>
+        <Text style={styles.linkText} onPress={() => navigation.navigate('Register')}>Register here</Text>
       </Text>
     </View>
   );

@@ -11,13 +11,6 @@ const TopUpScreen = () => {
 
   return (
     <SafeAreaProvider>
-        <View style={styles.header}>
-            <View style={{ flexDirection:'row', alignItems: 'center' }}>
-                <Ionicons name= 'chevron-back' size={20} color='black'></Ionicons>
-                <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft:5}}>Top Up</Text>
-            </View> 
-        </View>
-
         <View style={styles.container}>         
             <View style={styles.section}>
                 <Text style={styles.label}>Amount</Text>
