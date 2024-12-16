@@ -7,12 +7,13 @@ import {
   TouchableOpacity, Image
 } from 'react-native';
 import CustomCheckBox from './customCheckBox';
+import FormComponent from './component/Form';
 
-export default function RegisterScreen({navigation}) {
-  const [fullname, setFullname] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState('');
+export default function RegisterScreen2({navigation}) {
+//   const [fullname, setFullname] = useState('');
+//   const [email, setEmail] = useState('');
+//   const [password, setPassword] = useState('');
+//   const [avatarUrl, setAvatarUrl] = useState('');
   const [isChecked, setIsChecked] = useState(false);
 
   return (
@@ -21,32 +22,7 @@ export default function RegisterScreen({navigation}) {
         <Image source={require('./assets/logo.png')}/>
       </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Fullname"
-        value={fullname}
-        onChangeText={setFullname}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry={true}
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Avatar Url"
-        value={avatarUrl}
-        onChangeText={setAvatarUrl}
-      />
+      <FormComponent state={'register'}/>
 
       {/* Terms and Conditions */}
       <CustomCheckBox
@@ -70,7 +46,7 @@ export default function RegisterScreen({navigation}) {
       {/* Link Login */}
       <Text style={styles.loginText}>
         Have an account?{' '}
-        <Text style={styles.linkText} onPress = {() => navigation.navigate('Login')}>Login here</Text>
+        <Text style={styles.linkText} onPress = {() => navigation.navigate('Login2')}>Login here</Text>
       </Text>
     </View>
   );

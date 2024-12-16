@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import ModalComp from './component/Modal';
 
 export default function CustomCheckBox({ label, onValueChange, value, navigation }) {
   const [isChecked, setIsChecked] = useState(value || false);
+  const [modalVisible, setModalVisible] = useState(false)
 
   const toggleCheckbox = () => {
     const newValue = !isChecked;
@@ -22,8 +24,9 @@ export default function CustomCheckBox({ label, onValueChange, value, navigation
       </View>
       <View style={{marginLeft: 10}}>
        {label && <Text style={styles.label}>{label}</Text>}
-        <Text style={styles.linkText} onPress={() => navigation.navigate('Terms and Condition')}>Terms and Condition *</Text>
+        <Text style={styles.linkText} onPress={() => setModalVisible(true)} >Terms and Condition *</Text>
       </View>
+      <ModalComp modalState= {[modalVisible, setModalVisible]}/>
       
     </TouchableOpacity>
   );

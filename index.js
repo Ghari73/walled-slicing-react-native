@@ -6,8 +6,6 @@ import App from './App';
 // import App from './home';
 import TopUpScreen from './topup';
 import TransferScreen from './transfer';
-import RegisterScreen from './register';
-import LoginScreen from './login';
 import TermsCon from './termsCon';
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);

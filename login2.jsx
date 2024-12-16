@@ -6,9 +6,10 @@ import {
   View,
   TouchableOpacity, Image
 } from 'react-native';
+import FormComponent from './component/Form';
 
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen2({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -18,20 +19,7 @@ export default function LoginScreen({ navigation }) {
         <Image source={require('./assets/logo.png')}/>
       </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry={true}
-        value={password}
-        onChangeText={setPassword}
-    />
+    <FormComponent state={'login'}/>
 
     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
         <Text style={styles.buttonText}>Login</Text>
@@ -39,7 +27,7 @@ export default function LoginScreen({ navigation }) {
       {/* Link Login */}
       <Text style={styles.loginText}>
         Don't have account?{' '}
-        <Text style={styles.linkText} onPress={() => navigation.navigate('Register')}>Register here</Text>
+        <Text style={styles.linkText} onPress={() => navigation.navigate('Register2')}>Register here</Text>
       </Text>
     </View>
   );
