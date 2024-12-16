@@ -4,11 +4,26 @@ import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+function reverseFormatNumber(val,locale){
+  var group = new Intl.NumberFormat(locale).format(1111).replace(/1/g, '');
+  var decimal = new Intl.NumberFormat(locale).format(1.1).replace(/1/g, '');
+  var reversedVal = val.replace(new RegExp('\\' + group, 'g'), '');
+  reversedVal = reversedVal.replace(new RegExp('\\' + decimal, 'g'), '.');
+  return Number.isNaN(reversedVal)?0:reversedVal;
+}
 const TopUpScreen = () => {
-  const [amount, setAmount] = useState('100.000');
+  const [amount, setAmount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('BYOND Pay');
   const [notes, setNotes] = useState('');
+  const [errorAmount, setErrorAmount] = useState('');
 
+  const validateAmount = () =>{
+    if (amount < 0){
+        setErrorAmount('Nominal tidak valid')
+    } else{
+        setErrorAmount('')
+    }
+  }
   return (
     <SafeAreaProvider>
         <View style={styles.container}>         
@@ -17,12 +32,13 @@ const TopUpScreen = () => {
                 <View style={styles.inputContainer}>
                     <Text style={styles.currency}>IDR</Text>
                     <TextInput
-                        style={styles.input}
-                        keyboardType="numeric"
-                        value={amount}
-                        onChangeText={setAmount}
-                    />
-                </View>
+                          style={styles.input}
+                          keyboardType="numeric"
+                          value={amount== 0 ? '0' : Intl.NumberFormat('id').format(amount)}
+                          onChangeText={(text) => setAmount(reverseFormatNumber(text, 'id'))}
+                      />
+                    {errorAmount !== '' && <Text style={styles.errorText}>{errorAmount}</Text>}
+              </View>
             </View>
 
             <View style={styles.pickerContainer}>

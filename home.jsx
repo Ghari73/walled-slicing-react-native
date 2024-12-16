@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import ModalConfirm from './component/ModalConfirm';
 
 export default function Home({navigation}){
     const [isBalanceVisible, setIsBalanceVisible] = useState(true);
@@ -10,7 +11,12 @@ export default function Home({navigation}){
         { id: '2', name: 'Adityo Gizwanda', type: 'Topup', amount: 75000, date: '08 December 2024' },
         { id: '3', name: 'Adityo Gizwanda', type: 'Transfer', amount: -75000, date: '08 December 2024' },
         { id: '4', name: 'Adityo Gizwanda', type: 'Transfer', amount: -75000, date: '08 December 2024' },
+        { id: '5', name: 'Adityo Gizwanda', type: 'Transfer', amount: -75000, date: '08 December 2024' },
+        { id: '6', name: 'Adityo Gizwanda', type: 'Topup', amount: 75000, date: '08 December 2024' },
+        { id: '7', name: 'Adityo Gizwanda', type: 'Transfer', amount: -75000, date: '08 December 2024' },
+        { id: '8', name: 'Adityo Gizwanda', type: 'Transfer', amount: -75000, date: '08 December 2024' },
       ];
+      const [modalVisible, setModalVisible] = useState(false)
 
       const renderTransaction = ({ item }) => (
         <View style={styles.itemContainer}>
@@ -30,70 +36,79 @@ export default function Home({navigation}){
         </View>
       );
 
+      const openPopUp = () =>{
+        console.log('before openPopUp', modalVisible)
+        setModalVisible(true)
+        console.log('openPopUp', modalVisible)
+      } 
     return (
         <SafeAreaProvider>
-             <View style={styles.header}>
-              <View style={styles.profile}>
-                <Image source={require('./assets/syahdi.png')} style={styles.profileImage} />
-                <View style={{ marginLeft: 5 }}>
-                  <Text style={{ fontWeight: 'bold' }}>Syahdi</Text>
-                  <Text>Personal Account</Text>
+          <View style={styles.header}>
+                <View style={styles.profile}>
+                  <Image source={require('./assets/syahdi.png')} style={styles.profileImage} />
+                  <View style={{ marginLeft: 5 }}>
+                    <Text style={{ fontWeight: 'bold' }}>Syahdi</Text>
+                    <Text>Personal Account</Text>
+                  </View>
+                  <View style={{ flex: 1 }} />
+                  <Image source={require('./assets/Vector.png')} style={{ width: 20, height: 20, margin: 20 }} />
+                  <View >
+                    <Ionicons name= {'log-out-outline'} size={30} onPress={()=> openPopUp()}></Ionicons>
+                  </View>
+                  <ModalConfirm modalState= {[modalVisible, setModalVisible]}/>
                 </View>
-                <View style={{ flex: 1 }} />
-                <Image source={require('./assets/Vector.png')} style={{ width: 20, height: 20 }} />
+                
               </View>
+
+          <View style={{paddingHorizontal: 20}}>
+              <View style={styles.greeting}>
+                <View>
+                    <Text style={styles.greetingText}>Good Morning</Text>
+                    <Text style={styles.checkAllText}>Check all your incoming and outgoing transactions here</Text>
+                </View>
+                <Image source={require('./assets/Group.png')} />
+              </View>
+
+              <View style={styles.accountInfo}>
+                <Text style={styles.accountLabel}>Account No.</Text>
+                <Text style={styles.accountNumber}>100899</Text>
+              </View>
+
+              <View style={styles.balanceActionContainer}>
+                <View style={styles.balanceContainer}>
+                    <Text style={styles.balanceLabel}>Balance</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.balanceAmount}>
+                        {isBalanceVisible ? 'Rp 10.000.000' : '*********'}
+                    </Text>
+                    <TouchableOpacity onPress={() => setIsBalanceVisible(!isBalanceVisible)}>
+                        <Ionicons style={{margin: 5}}
+                        name={isBalanceVisible ? 'eye-outline' : 'eye-off-outline'}
+                        size={20}
+                        color="#969696"
+                        />
+                    </TouchableOpacity>
+                    </View>
+                </View>
+
+                <View style={styles.actions}>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Top Up')}>
+                      <Ionicons name="add" size={24} color="#fff" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Transfer')}>
+                      <Ionicons name="paper-plane" size={24} color="#fff" />
+                    </TouchableOpacity>
+                </View>
+              </View>
+              <Text style={styles.transactionHistoryLabel}>Transaction History</Text>
+
             </View>
 
             <FlatList
                 data={transactions}
                 keyExtractor={(item) => item.id}
                 renderItem={renderTransaction}
-                ListHeaderComponent={
-                <View style= {styles.container}>
-                    <View style={styles.greeting}>
-                      <View>
-                          <Text style={styles.greetingText}>Good Morning</Text>
-                          <Text style={styles.checkAllText}>Check all your incoming and outgoing transactions here</Text>
-                      </View>
-                      <Image source={require('./assets/Group.png')} />
-                    </View>
-
-                    <View style={styles.accountInfo}>
-                      <Text style={styles.accountLabel}>Account No.</Text>
-                      <Text style={styles.accountNumber}>100899</Text>
-                    </View>
-
-                    <View style={styles.balanceActionContainer}>
-                      <View style={styles.balanceContainer}>
-                          <Text style={styles.balanceLabel}>Balance</Text>
-                          <View style={{ flexDirection: 'row' }}>
-                          <Text style={styles.balanceAmount}>
-                              {isBalanceVisible ? 'Rp 10.000.000' : '*********'}
-                          </Text>
-                          <TouchableOpacity onPress={() => setIsBalanceVisible(!isBalanceVisible)}>
-                              <Ionicons style={{margin: 5}}
-                              name={isBalanceVisible ? 'eye-outline' : 'eye-off-outline'}
-                              size={20}
-                              color="#969696"
-                              />
-                          </TouchableOpacity>
-                          </View>
-                      </View>
-
-                      <View style={styles.actions}>
-                          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Top Up')}>
-                            <Ionicons name="add" size={24} color="#fff" />
-                          </TouchableOpacity>
-
-                          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Transfer')}>
-                           <Ionicons name="paper-plane" size={24} color="#fff" />
-                          </TouchableOpacity>
-                      </View>
-                    </View>
-
-                    <Text style={styles.transactionHistoryLabel}>Transaction History</Text>
-                </View>
-                }
             />
     </SafeAreaProvider>
     )
@@ -256,7 +271,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 12,
         marginVertical: 5,
-        backgroundColor: '#f9f9f9',
         borderRadius: 8,
     },
     circlePlaceholder: {

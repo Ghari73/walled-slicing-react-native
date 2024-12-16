@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, Button, View, SafeAreaView, Pressable, ScrollView} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-export default function  ModalComp({modalState = useState('')}) {
-  const [modalVisible, setModalVisible] = modalState;
 
+export default function ModalComp({modalState = useState('')}) {
+  const [modalVisible, setModalVisible] = modalState;
+ 
   return (
     <SafeAreaView style={styles.centeredView}>
         <Modal      

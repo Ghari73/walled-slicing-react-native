@@ -5,10 +5,21 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const TransferScreen = () => {
-  const [amount, setAmount] = useState('100.000');
+  const [amount, setAmount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('BYOND Pay');
   const [notes, setNotes] = useState('');
+  const [errorAmount, setErrorAmount] = useState('');
 
+  const validateAmount = () =>{
+    if (amount < 0){
+        setErrorAmount('Nominal tidak valid')
+    } else{
+        setErrorAmount('')
+    }
+  }
+
+
+  
   return (
     <SafeAreaProvider>
         <View style={styles.container}>         
@@ -19,9 +30,11 @@ const TransferScreen = () => {
                     <TextInput
                         style={styles.input}
                         keyboardType="numeric"
-                        value={amount}
-                        onChangeText={setAmount}
+                        value={amount== 0 ? '0' : Intl.NumberFormat('id').format(amount)}
+                        onChangeText={(text) => setAmount(reverseFormatNumber(text, 'id'))}
                     />
+                  {errorAmount !== '' && <Text style={styles.errorText}>{errorAmount}</Text>}
+                    
                 </View>
 
                 <View style={styles.balanceContainer}>
@@ -48,11 +61,25 @@ const TransferScreen = () => {
     </SafeAreaProvider>
   );
 };
+function reverseFormatNumber(val,locale){
+  var group = new Intl.NumberFormat(locale).format(1111).replace(/1/g, '');
+  var decimal = new Intl.NumberFormat(locale).format(1.1).replace(/1/g, '');
+  var reversedVal = val.replace(new RegExp('\\' + group, 'g'), '');
+  reversedVal = reversedVal.replace(new RegExp('\\' + decimal, 'g'), '.');
+  return Number.isNaN(reversedVal)?0:reversedVal;
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fafbfd',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginTop: 5,
+    marginLeft: 5,
+    fontStyle: 'italic'
   },
   header: {
     backgroundColor: '#ffffff',

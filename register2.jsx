@@ -38,7 +38,7 @@ export default function RegisterScreen2({navigation}) {
           { backgroundColor: isChecked ? '#007B7F' : '#ccc' },
         ]}
         disabled={!isChecked}
-        // onPress = {() => navigation.navigate('Login')}
+        onPress = {() => navigation.navigate('Login2')}
       >
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>

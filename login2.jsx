@@ -21,7 +21,7 @@ export default function LoginScreen2({ navigation }) {
 
     <FormComponent state={'login'}/>
 
-    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('TabNavigator')}>
         <Text style={styles.buttonText}>Login</Text>
     </TouchableOpacity>
       {/* Link Login */}
