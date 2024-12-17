@@ -10,6 +10,8 @@ import RegisterScreen2 from './register2';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Authprovider } from './context/authContext';
+import { useAuth } from './context/authContext';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,15 +46,33 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login2">
-        <Stack.Screen name="Login2" component={LoginScreen2} options={{ headerShown: false }} />
-        <Stack.Screen name="Register2" component={RegisterScreen2} options={{ headerShown: false }} />
-        <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false }} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Authprovider>
+      <Route></Route>
+    </Authprovider>
   );
 };
 
+const Route = () =>{
+  
+  const {user} = useAuth();
+  return (
+    
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login2">
+        {user? (
+          <>
+            <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false }} />
+          </>
+        ) : (
+          <>
+          <Stack.Screen name="Login2" component={LoginScreen2} options={{ headerShown: false }} />
+          <Stack.Screen name="Register2" component={RegisterScreen2} options={{ headerShown: false }} />
+          </>
+        )}
+        
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
 export default App;
 

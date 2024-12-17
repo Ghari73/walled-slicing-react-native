@@ -54,10 +54,9 @@ export default function Home({navigation}){
                   <Image source={require('./assets/Vector.png')} style={{ width: 20, height: 20, margin: 20 }} />
                   <View >
                     <Ionicons name= {'log-out-outline'} size={30} onPress={()=> openPopUp()}></Ionicons>
+                    <ModalConfirm modalState= {[modalVisible, setModalVisible]}/>
                   </View>
-                  <ModalConfirm modalState= {[modalVisible, setModalVisible]}/>
                 </View>
-                
               </View>
 
           <View style={{paddingHorizontal: 20}}>

@@ -14,7 +14,6 @@ export default function RegisterScreen2({navigation}) {
 //   const [email, setEmail] = useState('');
 //   const [password, setPassword] = useState('');
 //   const [avatarUrl, setAvatarUrl] = useState('');
-  const [isChecked, setIsChecked] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -22,32 +21,10 @@ export default function RegisterScreen2({navigation}) {
         <Image source={require('./assets/logo.png')}/>
       </View>
 
-      <FormComponent state={'register'}/>
+      <FormComponent state={'register'} navigation={navigation}/>
 
       {/* Terms and Conditions */}
-      <CustomCheckBox
-        label="I have read and agree to the"
-        value={isChecked}
-        onValueChange={(newValue) => setIsChecked(newValue)}
-        navigation={navigation}
-      />
-
-      <TouchableOpacity
-        style={[
-          styles.button,
-          { backgroundColor: isChecked ? '#007B7F' : '#ccc' },
-        ]}
-        disabled={!isChecked}
-        onPress = {() => navigation.navigate('Login2')}
-      >
-        <Text style={styles.buttonText}>Register</Text>
-      </TouchableOpacity>
-
-      {/* Link Login */}
-      <Text style={styles.loginText}>
-        Have an account?{' '}
-        <Text style={styles.linkText} onPress = {() => navigation.navigate('Login2')}>Login here</Text>
-      </Text>
+      
     </View>
   );
 }

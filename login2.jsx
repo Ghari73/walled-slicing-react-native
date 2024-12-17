@@ -19,16 +19,9 @@ export default function LoginScreen2({ navigation }) {
         <Image source={require('./assets/logo.png')}/>
       </View>
 
-    <FormComponent state={'login'}/>
+    <FormComponent state={'login'} navigation={navigation}/>
 
-    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('TabNavigator')}>
-        <Text style={styles.buttonText}>Login</Text>
-    </TouchableOpacity>
-      {/* Link Login */}
-      <Text style={styles.loginText}>
-        Don't have account?{' '}
-        <Text style={styles.linkText} onPress={() => navigation.navigate('Register2')}>Register here</Text>
-      </Text>
+    
     </View>
   );
 }
