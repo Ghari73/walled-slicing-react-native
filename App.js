@@ -13,6 +13,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Authprovider } from './context/authContext';
 import { useAuth } from './context/authContext';
 
+import { enableScreens } from 'react-native-screens';
+enableScreens()
+
 const Tab = createBottomTabNavigator();
 
 function TabNavigator() {

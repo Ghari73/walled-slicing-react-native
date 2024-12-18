@@ -5,6 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import ModalConfirm from './component/ModalConfirm';
 import { getUser } from './api/restApi';
 import { useAuth } from './context/authContext';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function Home({navigation}){
   const [modalVisible, setModalVisible] = useState(false)
@@ -12,6 +13,7 @@ export default function Home({navigation}){
   const [errorFetch, setErrorFetch] = useState(null);
 
   const {getUserData, userData, userTransactions, getTransactions} = useAuth()
+  const isFocused = useIsFocused()
   const openPopUp = () => {
     console.log('before openPopUp', modalVisible); // Nilai lama
     setModalVisible(true);
@@ -24,9 +26,11 @@ export default function Home({navigation}){
   useEffect(() => {
     getUserData()
     getTransactions()
-  }, [])
+  }, [isFocused])
 
     const [isBalanceVisible, setIsBalanceVisible] = useState(true);
+
+    
 
       const renderTransaction = ({ item }) => (
         <View style={styles.itemContainer}>
@@ -42,7 +46,7 @@ export default function Home({navigation}){
                 </View>
             </View> 
             <Text style={[styles.transactionAmount, { color: item.type === 'c' ? 'green' : item.type === 'd' ? 'red' : 'black' }]}>
-              {item.type === 'c' ? `+ ${item.amount.toLocaleString()}` : `- ${Math.abs(item.amount).toLocaleString()}`}
+              {item.type === 'c' ? `+ Rp${item.amount.toLocaleString()}` : `- Rp${Math.abs(item.amount).toLocaleString()}`}
             </Text>
 
           </View>

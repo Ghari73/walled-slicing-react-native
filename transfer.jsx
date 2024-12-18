@@ -72,7 +72,7 @@ const TransferScreen = ({navigation}) => {
                         style={styles.input}
                         keyboardType="numeric"
                         value={amount== 0 ? '0' : Intl.NumberFormat('id').format(amount)}
-                        onChangeText={(text) => setAmount(reverseFormatNumber(text, 'id'))}
+                        onChangeText={(text) => {setAmount(reverseFormatNumber(text, 'id')); validateAmount()}}
                     />
                   {errorAmount !== '' && <Text style={styles.errorText}>{errorAmount}</Text>}
                     
@@ -80,7 +80,7 @@ const TransferScreen = ({navigation}) => {
 
                 <View style={styles.balanceContainer}>
                   <Text style={styles.balanceLabel}>Balance</Text>
-                  <Text style={styles.balanceValue}>Rp {userData.balance}</Text>
+                  <Text style={styles.balanceValue}>Rp {Intl.NumberFormat('id').format(userData.balance)}</Text>
                 </View>
             </View>
 

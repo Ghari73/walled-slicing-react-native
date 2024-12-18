@@ -52,7 +52,7 @@ const [error, setError] = useState('');
   }
 
   const validateAmount = () =>{
-    if (amount < 0){
+    if (amount <= 0){
         setErrorAmount('Nominal tidak valid')
     } else{
         setErrorAmount('')
@@ -69,7 +69,7 @@ const [error, setError] = useState('');
                           style={styles.input}
                           keyboardType="numeric"
                           value={amount== 0 ? '0' : Intl.NumberFormat('id').format(amount)}
-                          onChangeText={(text) => setAmount(reverseFormatNumber(text, 'id'))}
+                          onChangeText={(text) => {setAmount(reverseFormatNumber(text, 'id')); validateAmount()}}
                       />
                     {errorAmount !== '' && <Text style={styles.errorText}>{errorAmount}</Text>}
               </View>

@@ -1,6 +1,6 @@
 import React, {createContext, useState, useContext, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getUser, getTransactionsApi } from '../api/restApi';
+import { getUser, getTransactionsApi, transactions } from '../api/restApi';
 
 const AuthContext = createContext();
 
@@ -41,7 +41,10 @@ export const Authprovider = ({children}) =>{
             console.log('getTransaction authContext')
             const response = await getTransactionsApi(user.token)
             console.log('koaskdpoaksd', response)
-            setUserTransactions(response)
+
+            let temp = response ? response : []
+
+            setUserTransactions(temp.reverse())
         } catch (error){
             console.log('poipopipii',error)
         }
