@@ -55,6 +55,7 @@ const App = () => {
 const Route = () =>{
   
   const {user} = useAuth();
+  console.log(user)
   return (
     
     <NavigationContainer>

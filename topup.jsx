@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useAuth } from './context/authContext';
+
 
 function reverseFormatNumber(val,locale){
   var group = new Intl.NumberFormat(locale).format(1111).replace(/1/g, '');
@@ -11,11 +13,43 @@ function reverseFormatNumber(val,locale){
   reversedVal = reversedVal.replace(new RegExp('\\' + decimal, 'g'), '.');
   return Number.isNaN(reversedVal)?0:reversedVal;
 }
-const TopUpScreen = () => {
+const TopUpScreen = ({navigation}) => {
   const [amount, setAmount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('BYOND Pay');
   const [notes, setNotes] = useState('');
   const [errorAmount, setErrorAmount] = useState('');
+const [error, setError] = useState('');
+  const [loading, setLoading] = useState('')
+
+  const {transferTopUp: authTransferTopUp, user, userData} = useAuth()
+  const topUp = async () =>{
+   
+    let dataTopUp = {
+      type: 'c',
+      amount: amount,
+      from_to: userData.account_no
+    }
+    
+    if (notes){
+      dataTopUp.description = notes
+    }
+    
+    if (!amount){
+      Alert.alert('Validation Error', 'receiver and amount cannot be empty!')
+    } else{
+      setLoading(true)
+      try{
+        console.log(user.token, dataTopUp)
+        const newTrans = await authTransferTopUp(user.token, dataTopUp)
+        Alert.alert('Success')
+        navigation.navigate('Home')
+
+      } catch (error){
+        setError(error)
+        Alert.alert(errorFetch.toString())
+      }
+    }
+  }
 
   const validateAmount = () =>{
     if (amount < 0){
@@ -61,7 +95,7 @@ const TopUpScreen = () => {
                 />
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={() => alert('Top Up Successful!')}>
+            <TouchableOpacity style={styles.button} onPress={() => topUp()}>
                 <Text style={styles.buttonText}>Top Up</Text>
             </TouchableOpacity>
         </View>

@@ -1,22 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import ModalConfirm from './component/ModalConfirm';
+import { getUser } from './api/restApi';
+import { useAuth } from './context/authContext';
 
 export default function Home({navigation}){
+  const [modalVisible, setModalVisible] = useState(false)
+  const [loading, setLoading] = useState('')
+  const [errorFetch, setErrorFetch] = useState(null);
+
+  const {getUserData, userData, userTransactions, getTransactions} = useAuth()
+  const openPopUp = () => {
+    console.log('before openPopUp', modalVisible); // Nilai lama
+    setModalVisible(true);
+  };
+  
+  useEffect(() => {
+    console.log('modalVisible updated:', modalVisible); // Nilai terbaru
+  }, [modalVisible]);
+
+  useEffect(() => {
+    getUserData()
+    getTransactions()
+  }, [])
+
     const [isBalanceVisible, setIsBalanceVisible] = useState(true);
-    const transactions = [
-        { id: '1', name: 'Adityo Gizwanda', type: 'Transfer', amount: -75000, date: '08 December 2024' },
-        { id: '2', name: 'Adityo Gizwanda', type: 'Topup', amount: 75000, date: '08 December 2024' },
-        { id: '3', name: 'Adityo Gizwanda', type: 'Transfer', amount: -75000, date: '08 December 2024' },
-        { id: '4', name: 'Adityo Gizwanda', type: 'Transfer', amount: -75000, date: '08 December 2024' },
-        { id: '5', name: 'Adityo Gizwanda', type: 'Transfer', amount: -75000, date: '08 December 2024' },
-        { id: '6', name: 'Adityo Gizwanda', type: 'Topup', amount: 75000, date: '08 December 2024' },
-        { id: '7', name: 'Adityo Gizwanda', type: 'Transfer', amount: -75000, date: '08 December 2024' },
-        { id: '8', name: 'Adityo Gizwanda', type: 'Transfer', amount: -75000, date: '08 December 2024' },
-      ];
-      const [modalVisible, setModalVisible] = useState(false)
 
       const renderTransaction = ({ item }) => (
         <View style={styles.itemContainer}>
@@ -24,37 +34,35 @@ export default function Home({navigation}){
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View style={styles.circlePlaceholder} />
                 <View>
-                <Text style={styles.transactionName}>{item.name}</Text>
-                <Text style={styles.transactionType}>{item.type}</Text>
-                <Text style={styles.transactionDate}>{item.date}</Text>
+                <Text style={styles.transactionName}>{item.from_to}</Text>
+                <Text style={styles.transactionType}>{item.type === 'c' ? 'Top Up' : item.type === 'd' ? 'Transfer' : item.type}</Text>
+                <Text style={styles.transactionDate}>
+                  {new Intl.DateTimeFormat('en-GB').format(new Date(item.created_at))}
+                </Text>
                 </View>
             </View> 
-            <Text style={[styles.transactionAmount, { color: item.amount > 0 ? 'green' : 'red' }]}>
-              {item.amount > 0 ? `+ ${item.amount.toLocaleString()}` : `- ${Math.abs(item.amount).toLocaleString()}`}
+            <Text style={[styles.transactionAmount, { color: item.type === 'c' ? 'green' : item.type === 'd' ? 'red' : 'black' }]}>
+              {item.type === 'c' ? `+ ${item.amount.toLocaleString()}` : `- ${Math.abs(item.amount).toLocaleString()}`}
             </Text>
+
           </View>
         </View>
-      );
-
-      const openPopUp = () =>{
-        console.log('before openPopUp', modalVisible)
-        setModalVisible(true)
-        console.log('openPopUp', modalVisible)
-      } 
+      ); 
+      
     return (
         <SafeAreaProvider>
           <View style={styles.header}>
                 <View style={styles.profile}>
                   <Image source={require('./assets/syahdi.png')} style={styles.profileImage} />
                   <View style={{ marginLeft: 5 }}>
-                    <Text style={{ fontWeight: 'bold' }}>Syahdi</Text>
+                    <Text style={{ fontWeight: 'bold' }}>{userData.full_name}</Text>
                     <Text>Personal Account</Text>
                   </View>
                   <View style={{ flex: 1 }} />
                   <Image source={require('./assets/Vector.png')} style={{ width: 20, height: 20, margin: 20 }} />
                   <View >
                     <Ionicons name= {'log-out-outline'} size={30} onPress={()=> openPopUp()}></Ionicons>
-                    <ModalConfirm modalState= {[modalVisible, setModalVisible]}/>
+                    <ModalConfirm modalVisible={modalVisible} setModalVisible={setModalVisible} navigation={navigation}/>
                   </View>
                 </View>
               </View>
@@ -62,7 +70,7 @@ export default function Home({navigation}){
           <View style={{paddingHorizontal: 20}}>
               <View style={styles.greeting}>
                 <View>
-                    <Text style={styles.greetingText}>Good Morning</Text>
+                    <Text style={styles.greetingText}>Good Morning, {userData.full_name}</Text>
                     <Text style={styles.checkAllText}>Check all your incoming and outgoing transactions here</Text>
                 </View>
                 <Image source={require('./assets/Group.png')} />
@@ -70,7 +78,7 @@ export default function Home({navigation}){
 
               <View style={styles.accountInfo}>
                 <Text style={styles.accountLabel}>Account No.</Text>
-                <Text style={styles.accountNumber}>100899</Text>
+                <Text style={styles.accountNumber}>{userData.account_no}</Text>
               </View>
 
               <View style={styles.balanceActionContainer}>
@@ -78,7 +86,7 @@ export default function Home({navigation}){
                     <Text style={styles.balanceLabel}>Balance</Text>
                     <View style={{ flexDirection: 'row' }}>
                     <Text style={styles.balanceAmount}>
-                        {isBalanceVisible ? 'Rp 10.000.000' : '*********'}
+                        {isBalanceVisible ? Intl.NumberFormat('id').format(userData.balance) : '*********'}
                     </Text>
                     <TouchableOpacity onPress={() => setIsBalanceVisible(!isBalanceVisible)}>
                         <Ionicons style={{margin: 5}}
@@ -105,7 +113,7 @@ export default function Home({navigation}){
             </View>
 
             <FlatList
-                data={transactions}
+                data={userTransactions}
                 keyExtractor={(item) => item.id}
                 renderItem={renderTransaction}
             />

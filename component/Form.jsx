@@ -2,9 +2,9 @@ import { Italic } from 'lucide-react';
 import { useState } from 'react';
 import { StyleSheet, TextInput, SafeAreaView, Text, TouchableOpacity, Alert } from 'react-native';
 import CustomCheckBox from '../customCheckBox';
-import api, {fetchLogin, fetchPosts} from '../api/restApi';
+import api, {fetchLogin, fetchPosts, getUser} from '../api/restApi';
+import { useAuth } from '../context/authContext';
 export default function FormComponent({ state, navigation }) {
-  console.log('state nya adalah: ', state);
 
   const [fullname, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -13,6 +13,7 @@ export default function FormComponent({ state, navigation }) {
   const [error, setError] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
   const [isChecked, setIsChecked] = useState(false);
+  const [dataUser, setDataUser] = useState('')
 
   const [reg, setReg] = useState('')
   const [loading, setLoading] = useState('')
@@ -36,6 +37,10 @@ export default function FormComponent({ state, navigation }) {
       password: password,
     }
 
+    if (avatarUrl){
+      postData.avatarUrl = avatarUrl
+    }
+
     if (!fullname || !email || !password){
       Alert.alert('Validation Error', 'fullname, email, and password cannot be empty!')
     }
@@ -54,14 +59,13 @@ export default function FormComponent({ state, navigation }) {
     
   }
 
+  const {login: setLoginState} = useAuth();
   const login = async () => {
-    const {login: setLoginState} = useAuth();
 
     let postData = {
       email: email,
       password: password
     }
-
     if (!email || !password){
       Alert.alert('Validation Error', 'fullname, email, and password cannot be empty!')
     }
@@ -70,8 +74,9 @@ export default function FormComponent({ state, navigation }) {
       setLoading(true)
       try{
         const newPost = await fetchLogin(postData)
+        setLoginState(newPost.data.token)
         Alert.alert('Success')
-        navigation.navigate('Home')
+        // console.log(newPost.data.data)
       } catch (error){
         setErrorFetch(error)
         Alert.alert(errorFetch.toString())
@@ -79,6 +84,19 @@ export default function FormComponent({ state, navigation }) {
     }
     
   }
+
+  const getData = async () => {
+        setLoading(true)
+        try{
+          
+          const dataUserLocal = await getUser()
+          setDataUser(dataUserLocal)
+          console.log("dataUser State",dataUser)
+        }catch(error){
+          setErrorFetch(error)
+          console.log(errorFetch.toString())
+        }
+      }
 
   const validateEmail = () =>{
     const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -165,9 +183,7 @@ export default function FormComponent({ state, navigation }) {
 
         {state === 'login' &&
           <>
-          <TouchableOpacity style={styles.button} onPress={() => {
-            login()
-            navigation.navigate('TabNavigator')}}>
+          <TouchableOpacity style={styles.button} onPress={() => login()}>
                   <Text style={styles.buttonText}>Login</Text>
               </TouchableOpacity>
                 {/* Link Login */}

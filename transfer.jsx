@@ -1,27 +1,68 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { getTransactions } from './api/restApi';
+import { useAuth } from './context/authContext';
 
-const TransferScreen = () => {
+const TransferScreen = ({navigation}) => {
   const [amount, setAmount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('BYOND Pay');
   const [notes, setNotes] = useState('');
   const [errorAmount, setErrorAmount] = useState('');
+  const [receiver, setReceiver] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState('')
+
+  const {transferTopUp: authTransferTopUp, user, userData} = useAuth()
+  const transfer = async () =>{
+    let dataTransfer = {
+      type: 'd',
+      from_to: receiver,
+      amount: amount
+    }
+
+    if(notes){
+      dataTransfer.description= notes
+    }
+
+    if (!receiver || !amount){
+      Alert.alert('Validation Error', 'receiver and amount cannot be empty!')
+    } else{
+      setLoading(true)
+      try{
+        const newTrans = await authTransferTopUp(user.token, dataTransfer)
+        Alert.alert('Success')
+        navigation.navigate('Home')
+      } catch (error){
+        setError(error)
+        Alert.alert(errorFetch.toString())
+      }
+    }
+  }
 
   const validateAmount = () =>{
-    if (amount < 0){
+    if (amount <= 0){
         setErrorAmount('Nominal tidak valid')
     } else{
         setErrorAmount('')
     }
   }
-
-
   
   return (
     <SafeAreaProvider>
+       <View style={styles.greenContainer}>
+          <Text style={styles.greenText}>To: </Text>
+          <TextInput
+              style={{color: 'white', fontSize:24}}
+              keyboardType="numeric"
+              placeholder='Penerima'
+              placeholderTextColor= "white"
+              value={receiver}
+              onChangeText={setReceiver}
+          />
+        </View>
         <View style={styles.container}>         
             <View style={styles.section}>
                 <Text style={styles.label}>Amount</Text>
@@ -39,7 +80,7 @@ const TransferScreen = () => {
 
                 <View style={styles.balanceContainer}>
                   <Text style={styles.balanceLabel}>Balance</Text>
-                  <Text style={styles.balanceValue}>Rp 10.000.000</Text>
+                  <Text style={styles.balanceValue}>Rp {userData.balance}</Text>
                 </View>
             </View>
 
@@ -54,7 +95,7 @@ const TransferScreen = () => {
                 />
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={() => alert('Transfer Successful!')}>
+            <TouchableOpacity style={styles.button} onPress={() => transfer()}>
                 <Text style={styles.buttonText}>Transfer</Text>
             </TouchableOpacity>
         </View>
